@@ -8,10 +8,12 @@
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap");
 
+      /* Default to Dark Mode */
       :root {
-        --bg-dark: #000000;
+        --bg-color: #000000;
         --card-bg: #111111;
         --text-main: #f5f5f7;
+        --text-strong: #ffffff;
         --text-muted: #86868b;
         --accent: #2997ff;
         --ring-move: #fa114f;
@@ -19,6 +21,19 @@
         --ring-stand: #00e5ff;
         --ring-bg-opacity: 0.15;
         --card-border: #222222;
+      }
+
+      /* Auto-switch to Light Mode based on system preference */
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg-color: #f5f5f7;
+          --card-bg: #ffffff;
+          --text-main: #1d1d1f;
+          --text-strong: #000000;
+          --text-muted: #6e6e73;
+          --card-border: #e5e5ea;
+          --ring-bg-opacity: 0.1;
+        }
       }
 
       * {
@@ -29,7 +44,7 @@
       }
 
       body {
-        background-color: var(--bg-dark);
+        background-color: var(--bg-color);
         color: var(--text-main);
         padding: 20px;
         -webkit-font-smoothing: antialiased;
@@ -40,19 +55,20 @@
         margin-bottom: 20px;
         padding-top: 10px;
       }
+
       header h1 {
         font-weight: 900;
         font-size: 26px;
         letter-spacing: -1px;
+        color: var(--text-strong);
       }
       header p {
-        color: var(--text-muted);
         font-size: 13px;
-        font-weight: 500;
       }
 
+      /* Desktop Expansion */
       .container {
-        max-width: 500px;
+        max-width: 900px;
         margin: 0 auto;
         display: flex;
         flex-direction: column;
@@ -64,15 +80,16 @@
         border: 1px solid var(--card-border);
         border-radius: 24px;
         padding: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
       }
 
       /* --- BENTO BOX UI --- */
       .bento-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 15px;
       }
+
       .bento-card {
         display: flex;
         flex-direction: column;
@@ -90,9 +107,9 @@
         margin-bottom: 8px;
       }
       .bento-value {
-        font-size: 36px;
+        font-size: 32px;
         font-weight: 900;
-        color: #fff;
+        color: var(--text-strong);
         line-height: 1.1;
       }
       .bento-unit {
@@ -101,17 +118,24 @@
         color: var(--text-muted);
       }
       .bento-imperial {
-        font-size: 14px;
+        font-size: 13px;
         color: var(--accent);
         font-weight: 700;
         display: block;
         margin-top: 4px;
       }
 
+      /* --- DESKTOP SPLIT LAYOUT --- */
+      .desktop-split {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
       /* --- CHART UI --- */
       .chart-container {
         position: relative;
-        height: 180px;
+        height: 250px;
         width: 100%;
         margin-top: 5px;
       }
@@ -119,9 +143,10 @@
       .section-title {
         font-size: 18px;
         font-weight: 700;
-        margin-top: 10px;
+        margin-bottom: 10px;
         padding-bottom: 10px;
         border-bottom: 1px solid var(--card-border);
+        color: var(--text-strong);
       }
 
       /* --- MILESTONES UI --- */
@@ -129,25 +154,28 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
-        margin-top: 15px;
       }
       .milestone-item {
         display: flex;
         align-items: center;
         gap: 12px;
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(128, 128, 128, 0.05);
         padding: 12px 15px;
         border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(128, 128, 128, 0.1);
         transition: 0.3s;
       }
       .milestone-item.achieved {
-        opacity: 0.5;
-        background: rgba(166, 255, 0, 0.05);
-        border-color: rgba(166, 255, 0, 0.2);
+        opacity: 0.6;
+        background: rgba(166, 255, 0, 0.1);
+        border-color: rgba(166, 255, 0, 0.3);
       }
       .milestone-item.achieved .ms-label {
         text-decoration: line-through;
+      }
+      .milestone-item.achieved .ms-expected {
+        text-decoration: line-through;
+        opacity: 0.6;
       }
 
       .check-circle {
@@ -170,7 +198,7 @@
         width: 14px;
         height: 14px;
         fill: none;
-        stroke: var(--bg-dark);
+        stroke: var(--bg-color);
         stroke-width: 3;
         stroke-linecap: round;
         stroke-linejoin: round;
@@ -181,30 +209,51 @@
         opacity: 1;
       }
 
-      .ms-label {
-        font-size: 15px;
-        font-weight: 600;
+      .ms-content {
         flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .ms-label-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+      .ms-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-main);
       }
       .ms-target {
-        font-weight: 400;
+        font-weight: 500;
         font-size: 12px;
         color: var(--text-muted);
-        float: right;
+      }
+      .ms-expected {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--accent);
+        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
       }
 
       /* --- ARCHIVE UI --- */
       .archive-list {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr;
         gap: 15px;
-        margin-top: 15px;
       }
+
       .day-card {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(128, 128, 128, 0.03);
+        border: 1px solid rgba(128, 128, 128, 0.1);
         border-radius: 16px;
         padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
       }
       .day-header {
         display: flex;
@@ -234,7 +283,7 @@
       .day-weight {
         font-weight: 900;
         font-size: 18px;
-        color: #fff;
+        color: var(--text-strong);
         display: flex;
         flex-direction: column;
         align-items: flex-end;
@@ -246,15 +295,15 @@
         margin-top: 2px;
       }
 
-      /* --- MINI RINGS --- */
+      /* --- MINI RINGS & STATS --- */
       .day-content {
         display: flex;
         align-items: center;
         gap: 15px;
-        background: rgba(0, 0, 0, 0.4);
+        background: #1c1c1e; /* AA accessible */
+        border: 1px solid #2c2c2e;
         padding: 12px;
         border-radius: 12px;
-        margin-bottom: 12px;
       }
       svg.mini-rings {
         width: 70px;
@@ -270,7 +319,7 @@
         fill: none;
         stroke-width: 7;
         stroke-linecap: round;
-        filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.2));
+        filter: drop-shadow(0 0 2px rgba(128, 128, 128, 0.2));
         transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
@@ -283,6 +332,7 @@
       .ring-blue {
         stroke: var(--ring-stand);
       }
+
       .bg-red {
         stroke: rgba(250, 17, 79, var(--ring-bg-opacity));
       }
@@ -309,22 +359,97 @@
       .r-std {
         color: var(--ring-stand);
       }
+      .r-steps {
+        color: #f5f5f7;
+        margin-top: 2px;
+        padding-top: 4px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
 
-      .day-notes {
-        font-size: 13px;
-        color: var(--text-muted);
-        line-height: 1.4;
+      /* --- DESKTOP TYPOGRAPHY & LAYOUT SCALING --- */
+      @media (min-width: 768px) {
+        .bento-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        .desktop-split {
+          flex-direction: row;
+        }
+        .chart-card {
+          flex: 2;
+        }
+        .milestone-card {
+          flex: 1;
+        }
+        .archive-list {
+          grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        }
+
+        /* Scaled Text Sizes */
+        header h1 {
+          font-size: 32px;
+        }
+        header p {
+          font-size: 15px;
+        }
+
+        .bento-title {
+          font-size: 13px;
+        }
+        .bento-value {
+          font-size: 40px;
+        }
+        .bento-unit {
+          font-size: 18px;
+        }
+        .bento-imperial {
+          font-size: 15px;
+        }
+
+        .section-title {
+          font-size: 22px;
+        }
+
+        .ms-label {
+          font-size: 16px;
+        }
+        .ms-target {
+          font-size: 13px;
+        }
+        .ms-expected {
+          font-size: 12px;
+        }
+
+        .day-badge {
+          font-size: 14px;
+        }
+        .day-date {
+          font-size: 16px;
+        }
+        .day-weight {
+          font-size: 22px;
+        }
+        .day-weight-imperial {
+          font-size: 14px;
+        }
+
+        .day-stats {
+          font-size: 14px;
+          gap: 6px;
+        }
       }
     </style>
   </head>
   <body>
     <header>
       <h1>90-Day Tracker</h1>
-      <p>Target: 83.69 kg <span style="font-size: 11px">(13st 2.5lbs)</span></p>
     </header>
 
     <div class="container">
       <div class="bento-grid">
+        <div class="card bento-card">
+          <div class="bento-title">Starting Weight</div>
+          <div class="bento-value" id="start-weight">--</div>
+        </div>
         <div class="card bento-card">
           <div class="bento-title">Current Weight</div>
           <div class="bento-value" id="current-weight">--</div>
@@ -333,17 +458,28 @@
           <div class="bento-title">Total Lost</div>
           <div class="bento-value" id="total-lost">--</div>
         </div>
-      </div>
-
-      <div class="card">
-        <div class="chart-container">
-          <canvas id="weightChart"></canvas>
+        <div class="card bento-card">
+          <div class="bento-title">Target Weight</div>
+          <div class="bento-value" id="target-weight">--</div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="section-title">Milestones</div>
-        <div id="milestone-container" class="milestone-list"></div>
+      <div class="desktop-split">
+        <div class="card chart-card">
+          <div
+            class="section-title"
+            style="border: none; padding: 0; margin-bottom: 0"
+          >
+            Progress
+          </div>
+          <div class="chart-container">
+            <canvas id="weightChart"></canvas>
+          </div>
+        </div>
+        <div class="card milestone-card">
+          <div class="section-title">Milestones</div>
+          <div id="milestone-container" class="milestone-list"></div>
+        </div>
       </div>
 
       <div class="card">
@@ -384,17 +520,27 @@
         );
         const weights = data.map((d) => d.weight_kg);
 
+        // DYNAMIC MATH: Pull starting weight directly from Day 1
+        const START_WEIGHT = weights[0];
         const currentKg = weights[weights.length - 1];
-        const START_WEIGHT = 99.25;
+        const TARGET_WEIGHT = 83.69;
         const lostKg = (START_WEIGHT - currentKg).toFixed(2);
 
         // --- BENTO BOXES ---
+        document.getElementById("start-weight").innerHTML =
+          `${START_WEIGHT}<span class="bento-unit">kg</span><span class="bento-imperial">${kgToStonesAndLbs(START_WEIGHT)}</span>`;
         document.getElementById("current-weight").innerHTML =
           `${currentKg}<span class="bento-unit">kg</span><span class="bento-imperial">${kgToStonesAndLbs(currentKg)}</span>`;
         document.getElementById("total-lost").innerHTML =
           `${lostKg}<span class="bento-unit">kg</span><span class="bento-imperial">${kgToLbsOnly(lostKg)}</span>`;
+        document.getElementById("target-weight").innerHTML =
+          `${TARGET_WEIGHT}<span class="bento-unit">kg</span><span class="bento-imperial">${kgToStonesAndLbs(TARGET_WEIGHT)}</span>`;
 
         // --- CHART ---
+        const rootStyles = getComputedStyle(document.documentElement);
+        const gridColor = rootStyles.getPropertyValue("--card-border").trim();
+        const tickColor = rootStyles.getPropertyValue("--text-muted").trim();
+
         if (weightChart) weightChart.destroy();
         weightChart = new Chart(
           document.getElementById("weightChart").getContext("2d"),
@@ -422,8 +568,8 @@
               maintainAspectRatio: false,
               plugins: { legend: { display: false } },
               scales: {
-                y: { grid: { color: "#222" }, ticks: { color: "#86868B" } },
-                x: { grid: { display: false }, ticks: { color: "#86868B" } },
+                y: { grid: { color: gridColor }, ticks: { color: tickColor } },
+                x: { grid: { display: false }, ticks: { color: tickColor } },
               },
             },
           },
@@ -432,13 +578,48 @@
         // --- MILESTONES ---
         const minWeight = Math.min(...weights);
         const milestones = [
-          { id: "ms-15st", label: "Under 15 stone", target: 95.25 },
-          { id: "ms-95kg", label: "Under 95 kg", target: 95.0 },
-          { id: "ms-1st", label: "Lost 1 stone", target: START_WEIGHT - 6.35 },
-          { id: "ms-90kg", label: "Under 90 kg", target: 90.0 },
-          { id: "ms-14st", label: "Under 14 stone", target: 88.9 },
-          { id: "ms-2st", label: "Lost 2 stone", target: START_WEIGHT - 12.7 },
-          { id: "ms-85kg", label: "Under 85 kg", target: 85.0 },
+          {
+            id: "ms-15st",
+            label: "Under 15 stone",
+            target: 95.25,
+            expected: "28 Apr 2026",
+          },
+          {
+            id: "ms-95kg",
+            label: "Under 95 kg",
+            target: 95.0,
+            expected: "5 May 2026",
+          },
+          {
+            id: "ms-1st",
+            label: "Lost 1 stone",
+            target: START_WEIGHT - 6.35,
+            expected: "15 May 2026",
+          },
+          {
+            id: "ms-90kg",
+            label: "Under 90 kg",
+            target: 90.0,
+            expected: "30 May 2026",
+          },
+          {
+            id: "ms-14st",
+            label: "Under 14 stone",
+            target: 88.9,
+            expected: "10 Jun 2026",
+          },
+          {
+            id: "ms-2st",
+            label: "Lost 2 stone",
+            target: START_WEIGHT - 12.7,
+            expected: "25 Jun 2026",
+          },
+          {
+            id: "ms-85kg",
+            label: "Under 85 kg",
+            target: 85.0,
+            expected: "15 Jul 2026",
+          },
         ];
 
         const msDiv = document.getElementById("milestone-container");
@@ -451,7 +632,13 @@
                         <div class="check-circle">
                             <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                         </div>
-                        <div class="ms-label">${ms.label} <span class="ms-target">(${ms.target.toFixed(1)} kg)</span></div>
+                        <div class="ms-content">
+                            <div class="ms-label-row">
+                                <span class="ms-label">${ms.label}</span>
+                                <span class="ms-target">(${ms.target.toFixed(1)} kg)</span>
+                            </div>
+                            <div class="ms-expected">🎯 Target: ${ms.expected}</div>
+                        </div>
                     </div>`;
         });
 
@@ -474,6 +661,7 @@
             month: "short",
           });
           const imperialWeight = kgToStonesAndLbs(day.weight_kg);
+          const formattedSteps = day.steps ? day.steps.toLocaleString() : "--";
 
           archiveDiv.innerHTML += `
                     <div class="day-card">
@@ -500,13 +688,12 @@
                             </svg>
                             
                             <div class="day-stats">
-                                <span class="r-move">Move: ${day.move_kcal} kcal</span>
+                                <span class="r-move">Move: ${day.move_kcal.toLocaleString()}</span>
                                 <span class="r-exc">Exercise: ${day.exercise_mins} min</span>
                                 <span class="r-std">Stand: ${day.stand_hours} hrs</span>
+                                <span class="r-steps">👟 ${formattedSteps} steps</span>
                             </div>
                         </div>
-                        
-                        <div class="day-notes">${day.notes || ""}</div>
                     </div>`;
         });
 
