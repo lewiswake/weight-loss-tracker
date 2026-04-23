@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>90-Day Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap");
+
+      :root {
+        --bg-dark: #000000;
+        --card-bg: #111111;
+        --text-main: #f5f5f7;
+        --text-muted: #86868b;
+        --accent: #2997ff;
+        --ring-move: #fa114f;
+        --ring-exercise: #a6ff00;
+        --ring-stand: #00e5ff;
+        --ring-bg-opacity: 0.15;
+        --card-border: #222222;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        padding: 20px;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 20px;
+        padding-top: 10px;
+      }
+      header h1 {
+        font-weight: 900;
+        font-size: 26px;
+        letter-spacing: -1px;
+      }
+      header p {
+        color: var(--text-muted);
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      .container {
+        max-width: 500px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 24px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      /* --- BENTO BOX UI --- */
+      .bento-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+      .bento-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 25px 15px;
+      }
+      .bento-title {
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+      }
+      .bento-value {
+        font-size: 36px;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1.1;
+      }
+      .bento-unit {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-muted);
+      }
+      .bento-imperial {
+        font-size: 14px;
+        color: var(--accent);
+        font-weight: 700;
+        display: block;
+        margin-top: 4px;
+      }
+
+      /* --- CHART UI --- */
+      .chart-container {
+        position: relative;
+        height: 180px;
+        width: 100%;
+        margin-top: 5px;
+      }
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--card-border);
+      }
+
+      /* --- MILESTONES UI --- */
+      .milestone-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .milestone-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 12px 15px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: 0.3s;
+      }
+      .milestone-item.achieved {
+        opacity: 0.5;
+        background: rgba(166, 255, 0, 0.05);
+        border-color: rgba(166, 255, 0, 0.2);
+      }
+      .milestone-item.achieved .ms-label {
+        text-decoration: line-through;
+      }
+
+      .check-circle {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid var(--text-muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.3s;
+        flex-shrink: 0;
+      }
+      .milestone-item.achieved .check-circle {
+        background: var(--ring-exercise);
+        border-color: var(--ring-exercise);
+      }
+
+      .check-circle svg {
+        width: 14px;
+        height: 14px;
+        fill: none;
+        stroke: var(--bg-dark);
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0;
+        transition: 0.3s;
+      }
+      .milestone-item.achieved .check-circle svg {
+        opacity: 1;
+      }
+
+      .ms-label {
+        font-size: 15px;
+        font-weight: 600;
+        flex-grow: 1;
+      }
+      .ms-target {
+        font-weight: 400;
+        font-size: 12px;
+        color: var(--text-muted);
+        float: right;
+      }
+
+      /* --- ARCHIVE UI --- */
+      .archive-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 15px;
+      }
+      .day-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 15px;
+      }
+      .day-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+
+      .day-date-group {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .day-badge {
+        color: var(--accent);
+        font-weight: 900;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .day-date {
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--text-main);
+      }
+
+      .day-weight {
+        font-weight: 900;
+        font-size: 18px;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+      .day-weight-imperial {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      /* --- MINI RINGS --- */
+      .day-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: rgba(0, 0, 0, 0.4);
+        padding: 12px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+      }
+      svg.mini-rings {
+        width: 70px;
+        height: 70px;
+        transform: rotate(-90deg);
+        flex-shrink: 0;
+      }
+      .ring-bg {
+        fill: none;
+        stroke-width: 7;
+      }
+      .ring-progress {
+        fill: none;
+        stroke-width: 7;
+        stroke-linecap: round;
+        filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.2));
+        transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .ring-red {
+        stroke: var(--ring-move);
+      }
+      .ring-green {
+        stroke: var(--ring-exercise);
+      }
+      .ring-blue {
+        stroke: var(--ring-stand);
+      }
+      .bg-red {
+        stroke: rgba(250, 17, 79, var(--ring-bg-opacity));
+      }
+      .bg-green {
+        stroke: rgba(166, 255, 0, var(--ring-bg-opacity));
+      }
+      .bg-blue {
+        stroke: rgba(0, 229, 255, var(--ring-bg-opacity));
+      }
+
+      .day-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .r-move {
+        color: var(--ring-move);
+      }
+      .r-exc {
+        color: var(--ring-exercise);
+      }
+      .r-std {
+        color: var(--ring-stand);
+      }
+
+      .day-notes {
+        font-size: 13px;
+        color: var(--text-muted);
+        line-height: 1.4;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>90-Day Tracker</h1>
+      <p>Target: 83.69 kg <span style="font-size: 11px">(13st 2.5lbs)</span></p>
+    </header>
+
+    <div class="container">
+      <div class="bento-grid">
+        <div class="card bento-card">
+          <div class="bento-title">Current Weight</div>
+          <div class="bento-value" id="current-weight">--</div>
+        </div>
+        <div class="card bento-card">
+          <div class="bento-title">Total Lost</div>
+          <div class="bento-value" id="total-lost">--</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chart-container">
+          <canvas id="weightChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Milestones</div>
+        <div id="milestone-container" class="milestone-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Daily Log</div>
+        <div id="archive-container" class="archive-list"></div>
+      </div>
+    </div>
+
+    <script>
+      const GOALS = { move: 800, exercise: 60, stand: 12 };
+      const C = { move: 175.9, exc: 125.6, std: 75.4 };
+      let weightChart;
+
+      function kgToStonesAndLbs(kg) {
+        const totalLbs = kg * 2.20462;
+        const stones = Math.floor(totalLbs / 14);
+        const lbs = (totalLbs % 14).toFixed(1);
+        return `${stones}st ${lbs}lbs`;
+      }
+
+      function kgToLbsOnly(kg) {
+        return (kg * 2.20462).toFixed(1) + " lbs";
+      }
+
+      function updateDashboard(data) {
+        // Sort chronologically
+        data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        data.forEach((dayObj, index) => {
+          dayObj.dayNumber = index + 1;
+        });
+
+        const dates = data.map((d) =>
+          new Date(d.date).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+          }),
+        );
+        const weights = data.map((d) => d.weight_kg);
+
+        const currentKg = weights[weights.length - 1];
+        const START_WEIGHT = 99.25;
+        const lostKg = (START_WEIGHT - currentKg).toFixed(2);
+
+        // --- BENTO BOXES ---
+        document.getElementById("current-weight").innerHTML =
+          `${currentKg}<span class="bento-unit">kg</span><span class="bento-imperial">${kgToStonesAndLbs(currentKg)}</span>`;
+        document.getElementById("total-lost").innerHTML =
+          `${lostKg}<span class="bento-unit">kg</span><span class="bento-imperial">${kgToLbsOnly(lostKg)}</span>`;
+
+        // --- CHART ---
+        if (weightChart) weightChart.destroy();
+        weightChart = new Chart(
+          document.getElementById("weightChart").getContext("2d"),
+          {
+            type: "line",
+            data: {
+              labels: dates,
+              datasets: [
+                {
+                  label: "Weight",
+                  data: weights,
+                  borderColor: "#2997FF",
+                  backgroundColor: "rgba(41,151,255,0.1)",
+                  borderWidth: 3,
+                  pointBackgroundColor: "#FA114F",
+                  pointBorderWidth: 0,
+                  pointRadius: 5,
+                  fill: true,
+                  tension: 0.3,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { grid: { color: "#222" }, ticks: { color: "#86868B" } },
+                x: { grid: { display: false }, ticks: { color: "#86868B" } },
+              },
+            },
+          },
+        );
+
+        // --- MILESTONES ---
+        const minWeight = Math.min(...weights);
+        const milestones = [
+          { id: "ms-15st", label: "Under 15 stone", target: 95.25 },
+          { id: "ms-95kg", label: "Under 95 kg", target: 95.0 },
+          { id: "ms-1st", label: "Lost 1 stone", target: START_WEIGHT - 6.35 },
+          { id: "ms-90kg", label: "Under 90 kg", target: 90.0 },
+          { id: "ms-14st", label: "Under 14 stone", target: 88.9 },
+          { id: "ms-2st", label: "Lost 2 stone", target: START_WEIGHT - 12.7 },
+          { id: "ms-85kg", label: "Under 85 kg", target: 85.0 },
+        ];
+
+        const msDiv = document.getElementById("milestone-container");
+        msDiv.innerHTML = "";
+        milestones.forEach((ms) => {
+          const isAchieved = minWeight <= ms.target;
+          const achievedClass = isAchieved ? "achieved" : "";
+          msDiv.innerHTML += `
+                    <div class="milestone-item ${achievedClass}">
+                        <div class="check-circle">
+                            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="ms-label">${ms.label} <span class="ms-target">(${ms.target.toFixed(1)} kg)</span></div>
+                    </div>`;
+        });
+
+        // --- ARCHIVE ---
+        const archiveDiv = document.getElementById("archive-container");
+        archiveDiv.innerHTML = "";
+
+        [...data].reverse().forEach((day) => {
+          const pMove = Math.min(day.move_kcal / GOALS.move, 1);
+          const pExc = Math.min(day.exercise_mins / GOALS.exercise, 1);
+          const pStd = Math.min(day.stand_hours / GOALS.stand, 1);
+
+          const offMove = C.move - pMove * C.move;
+          const offExc = C.exc - pExc * C.exc;
+          const offStd = C.std - pStd * C.std;
+
+          const dateStr = new Date(day.date).toLocaleDateString("en-GB", {
+            weekday: "long",
+            day: "numeric",
+            month: "short",
+          });
+          const imperialWeight = kgToStonesAndLbs(day.weight_kg);
+
+          archiveDiv.innerHTML += `
+                    <div class="day-card">
+                        <div class="day-header">
+                            <div class="day-date-group">
+                                <span class="day-badge">Day ${day.dayNumber}</span>
+                                <span class="day-date">${dateStr}</span>
+                            </div>
+                            <div class="day-weight">
+                                ${day.weight_kg} kg
+                                <span class="day-weight-imperial">${imperialWeight}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="day-content">
+                            <svg class="mini-rings" viewBox="0 0 70 70">
+                                <circle cx="35" cy="35" r="28" class="ring-bg bg-red"></circle>
+                                <circle cx="35" cy="35" r="20" class="ring-bg bg-green"></circle>
+                                <circle cx="35" cy="35" r="12" class="ring-bg bg-blue"></circle>
+                                
+                                <circle cx="35" cy="35" r="28" class="ring-progress ring-red anim-ring" stroke-dasharray="${C.move}" stroke-dashoffset="${C.move}" data-offset="${offMove}"></circle>
+                                <circle cx="35" cy="35" r="20" class="ring-progress ring-green anim-ring" stroke-dasharray="${C.exc}" stroke-dashoffset="${C.exc}" data-offset="${offExc}"></circle>
+                                <circle cx="35" cy="35" r="12" class="ring-progress ring-blue anim-ring" stroke-dasharray="${C.std}" stroke-dashoffset="${C.std}" data-offset="${offStd}"></circle>
+                            </svg>
+                            
+                            <div class="day-stats">
+                                <span class="r-move">Move: ${day.move_kcal} kcal</span>
+                                <span class="r-exc">Exercise: ${day.exercise_mins} min</span>
+                                <span class="r-std">Stand: ${day.stand_hours} hrs</span>
+                            </div>
+                        </div>
+                        
+                        <div class="day-notes">${day.notes || ""}</div>
+                    </div>`;
+        });
+
+        setTimeout(() => {
+          const animRings = document.querySelectorAll(".anim-ring");
+          animRings.forEach((ring) => {
+            ring.style.strokeDashoffset = ring.getAttribute("data-offset");
+          });
+        }, 50);
+      }
+
+      fetch("data.json")
+        .then((res) => res.json())
+        .then((data) => updateDashboard(data))
+        .catch((err) => console.error("Error loading JSON:", err));
+    </script>
+  </body>
+</html>

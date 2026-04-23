@@ -1,0 +1,29 @@
+[
+  {
+    "date": "2026-04-20",
+    "weight_kg": 98.5,
+    "move_kcal": 951,
+    "exercise_mins": 100,
+    "stand_hours": 13,
+    "steps": 13842,
+    "notes": "Kickoff day. Fasted, crushed the rings."
+  },
+  {
+    "date": "2026-04-21",
+    "weight_kg": 96.95,
+    "move_kcal": 1292,
+    "exercise_mins": 137,
+    "stand_hours": 12,
+    "steps": 13448,
+    "notes": "Dropped 1.55kg! Stole a pizza slice. Still melting fat."
+  },
+  {
+    "date": "2026-04-22",
+    "weight_kg": 96.75,
+    "move_kcal": 1069,
+    "exercise_mins": 97,
+    "stand_hours": 16,
+    "steps": 11000,
+    "notes": "Chicken and rice wok stir-fry. Walked to ASDA."
+  }
+]
