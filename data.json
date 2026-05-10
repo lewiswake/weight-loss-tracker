@@ -158,5 +158,13 @@
     "exercise_mins": 74,
     "stand_hours": 13,
     "steps": 11047
+  },
+  {
+    "date": "2026-05-10",
+    "weight_kg": 91.65,
+    "move_kcal": 683,
+    "exercise_mins": 62,
+    "stand_hours": 11,
+    "steps": 10138
   }
 ]
