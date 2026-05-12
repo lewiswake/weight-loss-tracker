@@ -162,9 +162,25 @@
   {
     "date": "2026-05-10",
     "weight_kg": 91.65,
-    "move_kcal": 683,
+    "move_kcal": 787,
+    "exercise_mins": 65,
+    "stand_hours": 13,
+    "steps": 10762
+  },
+  {
+    "date": "2026-05-11",
+    "weight_kg": 91.6,
+    "move_kcal": 715,
     "exercise_mins": 62,
-    "stand_hours": 11,
-    "steps": 10138
+    "stand_hours": 14,
+    "steps": 9842
+  },
+  {
+    "date": "2026-05-12",
+    "weight_kg": 91.5,
+    "move_kcal": 461,
+    "exercise_mins": 41,
+    "stand_hours": 6,
+    "steps": 8931
   }
 ]
