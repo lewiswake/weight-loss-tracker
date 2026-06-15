@@ -418,9 +418,41 @@
   {
     "date": "2026-06-11",
     "weight_kg": 88,
-    "move_kcal": 252,
-    "exercise_mins": 28,
-    "stand_hours": 3,
-    "steps": 3891
+    "move_kcal": 720,
+    "exercise_mins": 51,
+    "stand_hours": 15,
+    "steps": 9526
+  },
+  {
+    "date": "2026-06-12",
+    "weight_kg": 86.2,
+    "move_kcal": 778,
+    "exercise_mins": 63,
+    "stand_hours": 15,
+    "steps": 10586
+  },
+  {
+    "date": "2026-06-13",
+    "weight_kg": 86,
+    "move_kcal": 547,
+    "exercise_mins": 10,
+    "stand_hours": 14,
+    "steps": 5947
+  },
+  {
+    "date": "2026-06-14",
+    "weight_kg": 85.9,
+    "move_kcal": 551,
+    "exercise_mins": 17,
+    "stand_hours": 10,
+    "steps": 11062
+  },
+  {
+    "date": "2026-06-15",
+    "weight_kg": 85.9,
+    "move_kcal": 24,
+    "exercise_mins": 0,
+    "stand_hours": 2,
+    "steps": 177
   }
 ]
