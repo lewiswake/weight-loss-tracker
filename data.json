@@ -586,9 +586,113 @@
   {
     "date": "2026-07-02",
     "weight_kg": 84.1,
-    "move_kcal": 280,
-    "exercise_mins": 29,
-    "stand_hours": 5,
-    "steps": 4517
+    "move_kcal": 849,
+    "exercise_mins": 79,
+    "stand_hours": 15,
+    "steps": 13868
+  },
+  {
+    "date": "2026-07-03",
+    "weight_kg": 84.2,
+    "move_kcal": 539,
+    "exercise_mins": 37,
+    "stand_hours": 14,
+    "steps": 6663
+  },
+  {
+    "date": "2026-07-04",
+    "weight_kg": 85.35,
+    "move_kcal": 526,
+    "exercise_mins": 11,
+    "stand_hours": 11,
+    "steps": 7951
+  },
+  {
+    "date": "2026-07-05",
+    "weight_kg": 84.7,
+    "move_kcal": 545,
+    "exercise_mins": 10,
+    "stand_hours": 13,
+    "steps": 8136
+  },
+  {
+    "date": "2026-07-06",
+    "weight_kg": 83.85,
+    "move_kcal": 378,
+    "exercise_mins": 17,
+    "stand_hours": 11,
+    "steps": 5063
+  },
+  {
+    "date": "2026-07-07",
+    "weight_kg": 84.15,
+    "move_kcal": 368,
+    "exercise_mins": 8,
+    "stand_hours": 10,
+    "steps": 4512
+  },
+  {
+    "date": "2026-07-08",
+    "weight_kg": 84.25,
+    "move_kcal": 1219,
+    "exercise_mins": 160,
+    "stand_hours": 14,
+    "steps": 18674
+  },
+  {
+    "date": "2026-07-09",
+    "weight_kg": 84.15,
+    "move_kcal": 444,
+    "exercise_mins": 12,
+    "stand_hours": 10,
+    "steps": 6579
+  },
+  {
+    "date": "2026-07-10",
+    "weight_kg": 83.7,
+    "move_kcal": 405,
+    "exercise_mins": 18,
+    "stand_hours": 14,
+    "steps": 4614
+  },
+  {
+    "date": "2026-07-11",
+    "weight_kg": 83.55,
+    "move_kcal": 535,
+    "exercise_mins": 8,
+    "stand_hours": 13,
+    "steps": 5290
+  },
+  {
+    "date": "2026-07-12",
+    "weight_kg": 83.45,
+    "move_kcal": 382,
+    "exercise_mins": 22,
+    "stand_hours": 7,
+    "steps": 8986
+  },
+  {
+    "date": "2026-07-13",
+    "weight_kg": 84.6,
+    "move_kcal": 484,
+    "exercise_mins": 13,
+    "stand_hours": 11,
+    "steps": 7134
+  },
+  {
+    "date": "2026-07-14",
+    "weight_kg": 84.15,
+    "move_kcal": 787,
+    "exercise_mins": 69,
+    "stand_hours": 12,
+    "steps": 11919
+  },
+  {
+    "date": "2026-07-15",
+    "weight_kg": 83.85,
+    "move_kcal": 443,
+    "exercise_mins": 12,
+    "stand_hours": 12,
+    "steps": 6770
   }
 ]
